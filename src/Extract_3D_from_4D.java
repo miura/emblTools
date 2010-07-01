@@ -1,7 +1,7 @@
 import emblcmci.Extractfrom4D;
 import ij.plugin.PlugIn;
 
-
+/* configured for menu by plugin.config*/
 public class Extract_3D_from_4D implements PlugIn {
 
 	@Override
