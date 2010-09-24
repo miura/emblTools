@@ -20,9 +20,14 @@ public class Extractfrom4D {
 	
 	public void run(int extractdimension){
 		ImagePlus imp = WindowManager.getCurrentImage();
+		ImagePlus imp2 = core(imp, extractdimension);
+		imp2.show();
+	}
+		
+	public ImagePlus core(ImagePlus imp, int extractdimension){
 		if (imp.getNDimensions() < 4) {
 			IJ.error("Check Image Properties: this stack has no t-dimension");
-			return;
+			return null;
 		}
 		Calibration cal = new Calibration(imp);
 		int nSlices = imp.getNSlices();
@@ -44,7 +49,7 @@ public class Extractfrom4D {
 			imp2.setDimensions(nChannels, nSlices, newframes);
 			imp2.setOpenAsHyperStack(true);
 		}
-		imp2.show();
+		return imp2;
 	}
 	
 	void getStartAndEnd3D(int currentFrame, int nSlices, int nChannels){
