@@ -20,7 +20,7 @@ Joachim Walter's FFT Filter plugin at "http://rsb.info.nih.gov/ij/plugins/fft-fi
 */
 /*extended by Kota
  * */
-public class FFTFilter_NoGenDia implements  PlugInFilter, Measurements {
+public class FFTFilter_NoGenDia implements  Measurements {
 
 	private ImagePlus imp;
 	private String arg;
@@ -40,31 +40,25 @@ public class FFTFilter_NoGenDia implements  PlugInFilter, Measurements {
 	private static boolean displayFilter;
 	private static boolean processStack;
 
-	public int setup(String arg, ImagePlus imp) {
-		this.arg = arg;
+	public boolean core(ImagePlus imp) {
  		this.imp = imp;
  		if (imp==null)
- 			{IJ.noImage(); return DONE;}
+ 			{IJ.noImage(); return false;}
  		stackSize = imp.getStackSize();
 		fht  = (FHT)imp.getProperty("FHT");
 		if (fht!=null) {
 			IJ.error("FFT Filter", "Spatial domain image required");
-			return DONE;
+			return false;
 		}
-//		if (!showBandpassDialog(imp))
-//			return DONE;
-//		else
 		System.out.println(returnParameterString());
-			return processStack?DOES_ALL+DOES_STACKS:DOES_ALL;
+		for (int i = 0; i < stackSize; i++){
+			filter(imp.getStack().getProcessor(i+1));
+		}
+		return true;
 	}
-
+	
 	public void setImp(ImagePlus imp) {
 		this.imp = imp;
-	}
-
-	public void run(ImageProcessor ip) {
-		slice++;
-		filter(ip);
 	}
 	
 	void filter(ImageProcessor ip) {
