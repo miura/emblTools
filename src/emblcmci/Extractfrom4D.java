@@ -5,6 +5,7 @@ import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.measure.Calibration;
+import ij.plugin.Concatenator;
 import ij.plugin.Duplicator;
 import ij.plugin.HyperStackConverter;
 
@@ -17,7 +18,9 @@ public class Extractfrom4D {
 
 	private int current3DstackStart = 0; 
 	private int current3DstackEnd = 1; 
-	
+	private int currentIncrement = 1;
+	private int Gstartframe = 1;
+	private int Gendframe = 2;
 	public void run(int extractdimension){
 		ImagePlus imp = WindowManager.getCurrentImage();
 		ImagePlus imp2 = core(imp, extractdimension);
@@ -40,9 +43,27 @@ public class Extractfrom4D {
 		} else {	//extract a range of 4D stack
 			newframes = getStartAndEnd4D(nFrames, nSlices, nChannels);
 		}
-		
+		ImagePlus imp2 = null;
 		Duplicator dup = new Duplicator();
-		ImagePlus imp2 = dup.run(imp, current3DstackStart, current3DstackEnd);
+		if (currentIncrement == 1)
+			imp2 = dup.run(imp, current3DstackStart, current3DstackEnd);
+		else {
+			ImagePlus imptmp = null;
+			Concatenator ct = new Concatenator();
+			for (int i = Gstartframe; i <= Gendframe; i ++) {				
+				current3DstackStart = (i-1)*nSlices*nChannels +1; 
+				current3DstackEnd = i*nSlices*nChannels;
+				if (i == Gstartframe){
+					imp2 = dup.run(imp, current3DstackStart, current3DstackEnd);
+				} else {
+					if (((i - Gstartframe) % currentIncrement) == 0){
+						imptmp = dup.run(imp, current3DstackStart, current3DstackEnd);
+						imp2 = ct.concatenate(imp2, imptmp, false);
+					}
+				}
+			}	
+		}
+			
 		if (extractdimension == 4){
 			//HyperStackConverter hyp = new HyperStackConverter();
 			//hyp.shuffle();
@@ -60,17 +81,23 @@ public class Extractfrom4D {
 		GenericDialog gd = new GenericDialog("Time Frame Range");
 		gd.addNumericField("Start t-Frame (>=1) :", 1, 0);
 		gd.addNumericField("End t-Frame (<"+ nFrames+") :", nFrames, 0);
+		gd.addNumericField("Increment ", currentIncrement, 0);
 		gd.showDialog();
 		if (gd.wasCanceled()) 
 			return -1;
 		int startframe = (int) gd.getNextNumber();
 		int endframe = (int) gd.getNextNumber();
+		int increment = (int) gd.getNextNumber();
 		if ((startframe<1) || (endframe>nFrames))
 				return -1;
 		if (startframe > endframe) return -1;
 		current3DstackStart = (startframe-1)*nSlices*nChannels +1;
-		current3DstackEnd = endframe*nSlices*nChannels; 
-		return (endframe - startframe + 1);
+		current3DstackEnd = endframe*nSlices*nChannels;
+		currentIncrement = increment;
+		Gstartframe = startframe;
+		Gendframe = endframe;		
+		int resultframes = (int) Math.ceil((endframe - startframe + 1)/increment);
+		return resultframes;
 	}
 }
 
