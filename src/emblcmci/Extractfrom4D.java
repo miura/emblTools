@@ -21,6 +21,9 @@ public class Extractfrom4D {
 	private int currentIncrement = 1;
 	private int Gstartframe = 1;
 	private int Gendframe = 2;
+	private int Gstarttimepoint;
+	private int Gendtimepoint;
+	private int Gincrement;
 	public void run(int extractdimension){
 		ImagePlus imp = WindowManager.getCurrentImage();
 		ImagePlus imp2 = core(imp, extractdimension);
@@ -99,6 +102,124 @@ public class Extractfrom4D {
 		int resultframes = (int) Math.ceil((endframe - startframe + 1)/increment);
 		return resultframes;
 	}
+
+	// start and end t frame must be set by setters. 
+	public ImagePlus coreheadless(ImagePlus imp, int extractdimension){
+		if (imp.getNDimensions() < 4) {
+			IJ.error("Check Image Properties: this stack has no t-dimension");
+			return null;
+		}
+		Calibration cal = new Calibration(imp);
+		int nSlices = imp.getNSlices();
+		int nFrames = imp.getNFrames();
+		int nChannels = imp.getNChannels();
+		
+		int newframes = 1; 
+		if (extractdimension == 3) {
+			getStartAndEnd3D(imp.getFrame(), nSlices, nChannels);
+		} else {	//extract a range of 4D stack
+			newframes = StartAndEnd4D(nFrames, nSlices, nChannels);
+		}
+		ImagePlus imp2 = null;
+		Duplicator dup = new Duplicator();
+		if (currentIncrement == 1)
+			imp2 = dup.run(imp, current3DstackStart, current3DstackEnd);
+		else {
+			ImagePlus imptmp = null;
+			Concatenator ct = new Concatenator();
+			for (int i = Gstartframe; i <= Gendframe; i ++) {				
+				current3DstackStart = (i-1)*nSlices*nChannels +1; 
+				current3DstackEnd = i*nSlices*nChannels;
+				if (i == Gstartframe){
+					imp2 = dup.run(imp, current3DstackStart, current3DstackEnd);
+				} else {
+					if (((i - Gstartframe) % currentIncrement) == 0){
+						imptmp = dup.run(imp, current3DstackStart, current3DstackEnd);
+						imp2 = ct.concatenate(imp2, imptmp, false);
+					}
+				}
+			}	
+		}
+		if (extractdimension == 4){
+			//HyperStackConverter hyp = new HyperStackConverter();
+			//hyp.shuffle();
+			imp2.setDimensions(nChannels, nSlices, newframes);
+			imp2.setOpenAsHyperStack(true);
+		}
+		return imp2;
+	}
+	int StartAndEnd4D(int nFrames, int nSlices, int nChannels){
+		int startframe = Gstarttimepoint;
+		int endframe = Gendtimepoint;
+		int increment = Gincrement;
+		if ((startframe<1) || (endframe>nFrames))
+				return -1;
+		if (startframe > endframe) return -1;
+		current3DstackStart = (startframe-1)*nSlices*nChannels +1;
+		current3DstackEnd = endframe*nSlices*nChannels;
+		currentIncrement = increment;
+		Gstartframe = startframe;
+		Gendframe = endframe;		
+		int resultframes = (int) Math.ceil((endframe - startframe + 1)/increment);
+		return resultframes;
+	}
+
+	/**
+	 * @return the currentIncrement
+	 */
+	public int getCurrentIncrement() {
+		return currentIncrement;
+	}
+
+	/**
+	 * @param currentIncrement the currentIncrement to set
+	 */
+	public void setCurrentIncrement(int currentIncrement) {
+		this.currentIncrement = currentIncrement;
+	}
+
+	/**
+	 * @return the gstarttimepoint
+	 */
+	public int getGstarttimepoint() {
+		return Gstarttimepoint;
+	}
+
+	/**
+	 * @param gstarttimepoint the gstarttimepoint to set
+	 */
+	public void setGstarttimepoint(int gstarttimepoint) {
+		Gstarttimepoint = gstarttimepoint;
+	}
+
+	/**
+	 * @return the gendtimepoint
+	 */
+	public int getGendtimepoint() {
+		return Gendtimepoint;
+	}
+
+	/**
+	 * @param gendtimepoint the gendtimepoint to set
+	 */
+	public void setGendtimepoint(int gendtimepoint) {
+		Gendtimepoint = gendtimepoint;
+	}
+
+	/**
+	 * @return the gincrement
+	 */
+	public int getGincrement() {
+		return Gincrement;
+	}
+
+	/**
+	 * @param gincrement the gincrement to set
+	 */
+	public void setGincrement(int gincrement) {
+		Gincrement = gincrement;
+	}
 }
+
 
 
