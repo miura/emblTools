@@ -6,7 +6,7 @@
   <property name="dist"  location="dist" />
  
 	 <property name="pluginsDir"  location="$basedir/../../imagej/plugins/" />
- 
+	 <property name="FIJIpluginsDir"  location= "D:\\Fiji.app\\plugins\\" />
   <property name="user.name" value="Kota Miura" ></property>
 <target name="main" depends="compress" description="Main target">
 	<echo>
@@ -22,5 +22,6 @@
  		</manifest>
  	</jar>
     <copy file="embltools_.jar" toDir="${pluginsDir}" />
+    <copy file="embltools_.jar" toDir="${FIJIpluginsDir}" />		
   </target>
 </project>
