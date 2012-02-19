@@ -18,7 +18,8 @@ package emblcmci;
  * - add constructors
  * - methods for input / output resulting images.
  * - scaling of z axis in xz and yz images according to xy scale (default = true) 
- * Kota Miura (miura@embl.de), 20120216 
+ * Kota Miura (miura@embl.de), 20120216
+ * http://cmci.embl.de 
  *
  */
 

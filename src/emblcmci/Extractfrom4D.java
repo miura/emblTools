@@ -13,6 +13,18 @@ import ij.plugin.HyperStackConverter;
  * 
  * @author Kota Miura
  *
+ *
+ * example script (jython)
+ *
+	# extracting single time frame (the first time point)
+
+	from emblcmci import Extractfrom4D
+	e4d = Extractfrom4D()
+	e4d.setGstarttimepoint(1)
+	imp = e4d.coreheadless(IJ.getImage(), 3)
+	imp.show()
+ *
+ *
  */
 public class Extractfrom4D {
 
@@ -76,10 +88,18 @@ public class Extractfrom4D {
 		return imp2;
 	}
 	
+	/** sets field values for starting and ending index in the stack
+	 * according to the given frame number
+	 * 
+	 * @param currentFrame currently positioned frame number
+	 * @param nSlices	number of slices per frame
+	 * @param nChannels	number of channels per frame
+	 */
 	void getStartAndEnd3D(int currentFrame, int nSlices, int nChannels){
 		current3DstackStart = (currentFrame-1)*nSlices*nChannels +1; 
 		current3DstackEnd = currentFrame*nSlices*nChannels; 		
 	}
+	
 	int getStartAndEnd4D(int nFrames, int nSlices, int nChannels){
 		GenericDialog gd = new GenericDialog("Time Frame Range");
 		gd.addNumericField("Start t-Frame (>=1) :", 1, 0);
@@ -91,6 +111,33 @@ public class Extractfrom4D {
 		int startframe = (int) gd.getNextNumber();
 		int endframe = (int) gd.getNextNumber();
 		int increment = (int) gd.getNextNumber();
+		
+		int resultframes = getStartAndEnd4Dcore(
+				nFrames, nSlices, nChannels, startframe, endframe, increment);
+		return resultframes;
+	}
+
+	/** without GUI, suppose that the startpoint and endpoint are
+	 * set by setters. for headless. 
+	 * 
+	 * @param nFrames
+	 * @param nSlices
+	 * @param nChannels
+	 * @return
+	 */
+	int StartAndEnd4D(int nFrames, int nSlices, int nChannels){
+		int startframe = Gstarttimepoint;
+		int endframe = Gendtimepoint;
+		int increment = Gincrement;
+		int resultframes = getStartAndEnd4Dcore(
+				nFrames, nSlices, nChannels, startframe, endframe, increment);
+		return resultframes;
+	}
+	
+	int getStartAndEnd4Dcore(
+			int nFrames, int nSlices, int nChannels,
+			int startframe, int endframe, int increment){		
+
 		if ((startframe<1) || (endframe>nFrames))
 				return -1;
 		if (startframe > endframe) return -1;
@@ -116,7 +163,8 @@ public class Extractfrom4D {
 		
 		int newframes = 1; 
 		if (extractdimension == 3) {
-			getStartAndEnd3D(imp.getFrame(), nSlices, nChannels);
+//			getStartAndEnd3D(imp.getFrame(), nSlices, nChannels);
+			getStartAndEnd3D(Gstarttimepoint, nSlices, nChannels);			
 		} else {	//extract a range of 4D stack
 			newframes = StartAndEnd4D(nFrames, nSlices, nChannels);
 		}
@@ -147,21 +195,6 @@ public class Extractfrom4D {
 			imp2.setOpenAsHyperStack(true);
 		}
 		return imp2;
-	}
-	int StartAndEnd4D(int nFrames, int nSlices, int nChannels){
-		int startframe = Gstarttimepoint;
-		int endframe = Gendtimepoint;
-		int increment = Gincrement;
-		if ((startframe<1) || (endframe>nFrames))
-				return -1;
-		if (startframe > endframe) return -1;
-		current3DstackStart = (startframe-1)*nSlices*nChannels +1;
-		current3DstackEnd = endframe*nSlices*nChannels;
-		currentIncrement = increment;
-		Gstartframe = startframe;
-		Gendframe = endframe;		
-		int resultframes = (int) Math.ceil((endframe - startframe + 1)/increment);
-		return resultframes;
 	}
 
 	/**
