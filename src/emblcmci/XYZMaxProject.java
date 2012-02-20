@@ -107,6 +107,8 @@ public class XYZMaxProject {
 		output.copyBits(outxz, 0, y + FRAME_WIDTH, Blitter.COPY);
 		output.copyBits(outyz, x + FRAME_WIDTH, 0, Blitter.COPY);
 		ImagePlus xyzimp = new ImagePlus("XYZ_Max_Projection", output);
+		Calibration calib = imp.getCalibration();
+		xyzimp.setCalibration(calib.copy());
 		return xyzimp;
 	}
 	//   xyzimp.show();
