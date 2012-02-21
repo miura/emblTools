@@ -71,7 +71,7 @@ public class XYZMaxProject {
 		int x = stk.getWidth();
 		int y = stk.getHeight();
 		int z = stk.getSize();
-
+		IJ.log("Z-size:" + Integer.toString(z));
 		// Create xy Processor with room for xz and yz
 		ImageProcessor outxz = stk.getProcessor(1).createProcessor(x,z);
 		ImageProcessor outyz = stk.getProcessor(1).createProcessor(z,y);
@@ -95,11 +95,18 @@ public class XYZMaxProject {
 			}
 		}
 		if (doscale){
+			IJ.log("Z factor used:" + Double.toString(this.zf));
+			double newzsize = ((double) outxz.getHeight()) * this.zf;
+			IJ.log("...original size:" + Integer.toString(outxz.getHeight()));
+			IJ.log("...new size:" + Double.toString(newzsize));
 			outxz.setInterpolationMethod(ImageProcessor.BILINEAR);
-			outxz.scale(1.0, zf);
+			outxz = outxz.resize(outxz.getWidth(), (int) Math.round(newzsize));
+			
 			outyz.setInterpolationMethod(ImageProcessor.BILINEAR);
-			outyz.scale(zf, 1.0);
+			IJ.log("YZ width Before Scaling: " + Integer.toString(outyz.getWidth()));
+			outyz = outyz.resize((int) Math.round(newzsize), outyz.getHeight());
 			IJ.log("scaled XZ and YZ");
+			IJ.log("YZ width After Scaling: " + Integer.toString(outyz.getWidth()));			
 		}
 		ImageProcessor output = stk.getProcessor(1).
 			createProcessor(x + outyz.getWidth() + FRAME_WIDTH, y + outxz.getHeight() +FRAME_WIDTH);		
