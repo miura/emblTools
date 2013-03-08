@@ -12,12 +12,12 @@
 	</parent>
 
 	<groupId>embl.cmci</groupId>
-	<artifactId>Dot_Linker</artifactId>
+	<artifactId>embltools_</artifactId>
 	<version>1.0.0</version>
 
-	<name>plugins/Dot_Linker</name>
+	<name>plugins/embltools_</name>
   <description>A Maven project implementing an ImageJ 1.x plugin
-                
+               library of cmci.embl.de 
   </description>
 
 	<dependencies>
