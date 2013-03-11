@@ -3,23 +3,14 @@ package emblcmci;
 /**
  * This Run_MyMacro is a duplicate of a class in "QuickPALM" plugin
  * Written by Ricardo Henriques
- *  * http://code.google.com/p/quickpalm/
- *  
- *  Underscore in the class name is deleted. 
+ *  * http://code.google.com/p/quickpalm/ 
  */
 
-import ij.*;
-import ij.measure.*;
-import ij.plugin.*;
-import ij.plugin.filter.*;
-import ij.plugin.frame.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.measure.CurveFitter.*;
-import java.awt.*;
-import java.lang.*;
-import java.io.*;
-import java.net.*;
+import ij.IJ;
+import ij.plugin.PlugIn;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.IOException;
 
 public class RunMyMacro implements PlugIn 
 {
