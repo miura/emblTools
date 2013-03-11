@@ -1,3 +1,4 @@
+package emblcmci.plugins;
 
 import emblcmci.FFTFilter_NoGenDia;
 import ij.ImagePlus;

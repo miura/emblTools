@@ -1,3 +1,4 @@
+package emblcmci.plugins;
 import emblcmci.XYZMaxProject;
 import ij.IJ;
 import ij.ImagePlus;
