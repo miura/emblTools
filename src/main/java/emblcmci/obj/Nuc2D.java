@@ -12,14 +12,15 @@ public class Nuc2D extends Obj2D {
 
 	public int area;
 	public int perimeter;
+	public int totalint;
 	
-	public Nuc2D(int x, int y) {
-		super();
-		setCoord(x, y);
+	public Nuc2D(int x, int y, int id) {
+		super(x, y, id);
+		
 	}
-	public Nuc2D(int x, int y, int t) {
-		super();
-		setCoord(x, y, t);
-	}
+	public Nuc2D(int x, int y, int t, int id) {
+		super(x, y, t, id);
+		
+	}	
 	
 }
