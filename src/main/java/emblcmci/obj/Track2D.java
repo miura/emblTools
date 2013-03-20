@@ -2,7 +2,7 @@ package emblcmci.obj;
 
 import java.util.ArrayList;
 
-public abstract class Track2D implements Track {
+public abstract class Track2D implements ITrack {
 	ArrayList<Obj2D> nodes;
 	
 	Track2D(ArrayList<Obj2D> nodes){
