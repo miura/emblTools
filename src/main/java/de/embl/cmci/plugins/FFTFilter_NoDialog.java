@@ -1,6 +1,6 @@
-package emblcmci.plugins;
+package de.embl.cmci.plugins;
 
-import emblcmci.FFTFilter_NoGenDia;
+import de.embl.cmci.FFTFilter_NoGenDia;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.plugin.PlugIn;

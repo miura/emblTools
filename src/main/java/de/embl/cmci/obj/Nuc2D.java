@@ -6,7 +6,7 @@
  * 20130311 Kota Miura, cmci.embl.de
  * 
  */
-package emblcmci.obj;
+package de.embl.cmci.obj;
 
 import java.text.NumberFormat;
 

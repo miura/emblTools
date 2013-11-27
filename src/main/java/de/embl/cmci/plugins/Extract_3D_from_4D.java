@@ -1,5 +1,5 @@
-package emblcmci.plugins;
-import emblcmci.Extractfrom4D;
+package de.embl.cmci.plugins;
+import de.embl.cmci.Extractfrom4D;
 import ij.plugin.PlugIn;
 
 /* configured for menu by plugin.config*/

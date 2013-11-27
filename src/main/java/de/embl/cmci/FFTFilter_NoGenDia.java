@@ -1,13 +1,12 @@
-package emblcmci;
+package de.embl.cmci;
 
-import ij.plugin.filter.*;
 import ij.*;
 import ij.process.*;
-import ij.gui.*;
 import ij.measure.*;
 import ij.plugin.ContrastEnhancer;
 import java.awt.*;
-import java.util.*;
+
+import emblcmci.FFTFilter_NoGenDia;
 
 /** 
 This class implements the Process/FFT/Bandpass Filter command. It is based on 

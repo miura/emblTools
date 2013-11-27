@@ -1,5 +1,5 @@
-package emblcmci.plugins;
-import emblcmci.XYZMaxProject;
+package de.embl.cmci.plugins;
+import de.embl.cmci.XYZMaxProject;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.PlugIn;

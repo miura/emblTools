@@ -1,7 +1,7 @@
-package emblcmci.plugins;
+package de.embl.cmci.plugins;
 
 
-import emblcmci.Extractfrom4D;
+import de.embl.cmci.Extractfrom4D;
 import ij.plugin.PlugIn;
 
 public class Extract_4D_from_4D implements PlugIn {

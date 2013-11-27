@@ -1,4 +1,4 @@
-package emblcmci;
+package de.embl.cmci;
 
 /** XYZMaxProject.java
  * 

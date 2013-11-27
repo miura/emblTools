@@ -1,4 +1,4 @@
-package emblcmci.macro;
+package de.embl.cmci.macro;
 
 /**
  * This Run_MyMacro is a duplicate of a class in "QuickPALM" plugin
