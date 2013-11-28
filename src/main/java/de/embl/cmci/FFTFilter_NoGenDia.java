@@ -6,7 +6,7 @@ import ij.measure.*;
 import ij.plugin.ContrastEnhancer;
 import java.awt.*;
 
-import emblcmci.FFTFilter_NoGenDia;
+//import emblcmci.FFTFilter_NoGenDia;
 
 /** 
 This class implements the Process/FFT/Bandpass Filter command. It is based on 
